@@ -1,0 +1,15 @@
+# create AKS Cluster using KUBENET
+
+az group create --name rg-aks-cni --location centralindia
+
+az aks create -g rg-aks-cni -n aks-cni --network-plugin kubenet
+
+
+# create AKS Cluster using AZURE CNI
+
+az group create --name rg-aks-cni --location centralindia
+
+az aks create -g rg-aks-cni -n aks-cni --network-plugin azure
+
+# create AKS Cluster using AZURE CNI OVERLAY
+
