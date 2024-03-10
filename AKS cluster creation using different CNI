@@ -1,17 +1,17 @@
-# create AKS Cluster using KUBENET
+# create AKS Cluster using KUBENET  [ NODE POOL = 110 Pods/Node ] Total No of Nodes: 251 for a /24 CIDR
 
 az group create --name rg-aks-cni --location centralindia
 
 az aks create -g rg-aks-cni -n aks-cni --network-plugin kubenet
 
 
-# create AKS Cluster using AZURE CNI
+# create AKS Cluster using AZURE CNI  [ NODE POOL = 30 Pods/Node ] Total No of Nodes: 8 for a /24 CIDR
 
 az group create --name rg-aks-cni --location centralindia
 
 az aks create -g rg-aks-cni -n aks-cni --network-plugin azure
 
-# create AKS Cluster using AZURE CNI OVERLAY
+# create AKS Cluster using AZURE CNI OVERLAY [ NODE POOL = 250 Pods/Node ]
 
 az group create --name rg-aks-cni-overlay --location centralindia
 
