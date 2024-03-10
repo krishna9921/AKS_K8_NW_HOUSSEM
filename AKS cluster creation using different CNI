@@ -13,3 +13,10 @@ az aks create -g rg-aks-cni -n aks-cni --network-plugin azure
 
 # create AKS Cluster using AZURE CNI OVERLAY
 
+az group create --name rg-aks-cni-overlay --location centralindia
+
+az aks create -g rg-aks-cni-overlay -n aks-cni-overlay --network-plugin azure --network-plugin-mode overlay --pod-cidr 192.168.0.0/16 
+
+
+
+
