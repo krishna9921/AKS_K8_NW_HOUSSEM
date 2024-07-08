@@ -1,6 +1,10 @@
 # create AKS Cluster using KUBENET  [ NODE POOL = 110 Pods/Node ] Total No of Nodes: 251 for a /24 CIDR
 
+# Creation of resource group
+
 az group create --name rg-aks-cni --location centralindia
+
+# creating aks cluster with kubenet as CNI (DEFAULT)
 
 az aks create -g rg-aks-cni -n aks-cni --network-plugin kubenet
 
@@ -16,6 +20,38 @@ az aks create -g rg-aks-cni -n aks-cni --network-plugin azure
 az group create --name rg-aks-cni-overlay --location centralindia
 
 az aks create -g rg-aks-cni-overlay -n aks-cni-overlay --network-plugin azure --network-plugin-mode overlay --pod-cidr 192.168.0.0/16 
+
+################################################ Operations #####################################################################
+
+# How to SSH to the AKS NODES 
+
+* Name of the INFRSTRUCTURE RESOURCE GROUP // $CLUSTER_RESOURCE_GROUP
+* NAME OF THE VM SCALE SET // $SCALE_SET_NAME
+
+az vmss extension set --resource-group <> --vmss-name <> --name <> --publisher <> --version <> --protected-settings <>
+
+az vmss update-instances --instance-ids '*' --resource-group $CLUSTER_RESOURCE_GROUP --name $SCALE_SET_NAME
+
+kubectl run -it --rm aks-ssh --image=debian 
+
+exec into the above container and install ssh 
+
+> apt-get update && apt-get install openssh-client -y 
+
+* COPY THE SSH KEYS 
+
+kubectl cp ~/.ssh/id_rsa $(kubectl get pod -l run=aks-ssh -o jsonpath='{.items[0].metadata.name}'):/id_rsa
+
+# Schedule Node Restarts with Kured 
+
+helm repo add kured https://weaveworks.github.io/kured
+
+helm upgrade kured kured/kured --namespace kured install --create-namespace --set nodeSelector <> --set configuration.startTime=9am 
+--set configuration.endTime=11pm --set configuration.period=0h1m0s --set configurationtimeZone=
+
+# Login to k8 cluster with kubelogin.
+
+kubelogin convert-kubeconfig -l azurecli 
 
 
 
