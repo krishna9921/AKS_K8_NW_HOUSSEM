@@ -54,5 +54,44 @@ helm upgrade kured kured/kured --namespace kured install --create-namespace --se
 kubelogin convert-kubeconfig -l azurecli 
 
 
+====================================++++++++++++++++ SCALING +++++++++++++++++++++++++==================================
+
+## ENABLE CLUSTER AUTO SCALING.
+
+az aks nodepool update --resource-group --name --cluster-name --enable-cluster-autoscaler --min-count --max-count 
+
+### CREATE AKS CLUSTER with virtual nodes enabled => https://github.com/HoussemDellai/k8s-scalability/blob/master/virtual-node/virtual-node.yaml
+
+=================================================*********** SECRETS USING CSI DRIVER ****************************======================
+
+MAIN PAGE : https://github.com/HoussemDellai/docker-kubernetes-course/tree/main/40_secret_store_csi_keyvault
+
+# Create a cluster with Secret store CSI and Workload Identity
+
+az group create -n aks_rg -l westeurope
+
+az aks create -g aks_rg -n aks_cluster --enable_addons azure-keyvault-secrets-provider --enable-secret-rotation --rotation-policy-interval 5m --enabl-oidc-issuer
+--enable-workload-identity
+
+# create azure key valut and secret 
+
+az keyvault create -n <> -g <> --enable_rbac-authorization
+
+az keyvault secret set --vault-name <> --name <> --value <>
+
+
+# Create user assigned managed identity 
+
+az identity create -g <> -n <>
+
+az role assignment create --assignee <> --role "Key vault secrets user " --scope <>
+
+# Configure federated credentials with managed identity
+
+az identity create -g <> -n <>
+az identity federated-credential create -n <> -g --identity-name <> --issuer <> --subject system:serviceaccount:${NAMESPACE_APP}:${SERVICE_ACCOUNT_NAME}
+
+=====
+
 
 
